@@ -10,25 +10,36 @@ Deno.serve(async (req) => {
 
   try {
     const { textQuery } = await req.json();
+
     if (!textQuery || textQuery.trim().length < 3) {
-      return new Response(JSON.stringify({ places: [] }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ places: [] }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
+
+    // ✅ ENV se key lo
+    const GOOGLE_API_KEY = Deno.env.get("GOOGLE_API_KEY");
 
     const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Goog-Api-Key': 'AIzaSyCjWqqKJ5CF3PuTDq6uaG8TDZvdl-Z9EuM',
+        'X-Goog-Api-Key': GOOGLE_API_KEY!,
         'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.location',
-        'Origin': 'https://dev.reelo.io',
-        'Referer': 'https://dev.reelo.io/',
       },
       body: JSON.stringify({ textQuery: textQuery.trim() }),
     });
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+
+    return new Response(JSON.stringify(data), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
 });

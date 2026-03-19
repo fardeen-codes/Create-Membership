@@ -445,7 +445,35 @@ function PurchaseCanvas({ brandInitials, title, price, themeColor, onClose, rest
           //     {submitting ? "Submitting..." : "Launch Your Membership TODAY"}
           //   </button>
           // </div>
-          <div style={{ padding: "20px 0" }}>
+          <div style={{ padding: "20px 0", textAlign: "center" }}>
+
+            {/* H1 */}
+            <h1
+              style={{
+                fontFamily: T.serif,
+                fontSize: 22,
+                fontWeight: 600,
+                color: "#333",
+                marginBottom: 6,
+              }}
+            >
+              Ready To Lead The Prepaid Revolution?
+            </h1>
+
+            {/* H2 */}
+            <h2
+              style={{
+                fontFamily: T.sans,
+                fontSize: 13,
+                color: "#888",
+                marginBottom: 16,
+                fontWeight: 400,
+              }}
+            >
+              Enter your details to get started
+            </h2>
+
+            {/* HubSpot Form */}
             <HubspotForm />
           </div>
         )}
