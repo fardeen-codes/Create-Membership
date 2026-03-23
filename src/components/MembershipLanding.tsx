@@ -518,6 +518,23 @@ export default function MembershipLanding(props: MembershipLandingProps) {
 
   const [showPurchase, setShowPurchase] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+
+      if (scrollPercent > 40) {
+        setShowPurchase(true);
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       <style>{KEYFRAMES}</style>
@@ -569,7 +586,7 @@ export default function MembershipLanding(props: MembershipLandingProps) {
               style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: 18, background: "#161C1F", padding: "18px 24px", border: "none", cursor: "pointer" }}>
               <div style={{ textAlign: "left" as const }}>
                 <div style={{ fontFamily: T.sans, fontSize: 12, color: "#FFFFFF", marginBottom: 2 }}>Valid for {data.validity}</div>
-                <div style={{ fontFamily: "'Gambarino', 'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 400, color: "#FFFFFF" }}>Buy Now</div>
+                <div style={{ fontFamily: "'Gambarino', 'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 400, color: "#FFFFFF" }}>Share Now</div>
               </div>
               <div style={{ textAlign: "right" as const }}>
                 <div style={{ fontFamily: T.sans, fontSize: 11, color: "#FFFFFF" }}>only</div>
