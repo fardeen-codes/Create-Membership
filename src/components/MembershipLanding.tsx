@@ -423,7 +423,7 @@ function PurchaseCanvas({ brandInitials, title, price, themeColor, onClose, rest
     <div style={overlayStyle} onClick={onClose}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
       <div style={sheetStyle} onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} style={{ position: "absolute", top: 12, right: 14, background: "none", border: "none", fontSize: 20, color: "#999", cursor: "pointer", lineHeight: 1 }}>✕</button>
+        {/* <button onClick={onClose} style={{ position: "absolute", top: 12, right: 14, background: "none", border: "none", fontSize: 20, color: "#999", cursor: "pointer", lineHeight: 1 }}>✕</button> */}
 
         {step === "phone" && (
           // <div style={{ animation: "slideUpText 0.3s ease-out" }}>
