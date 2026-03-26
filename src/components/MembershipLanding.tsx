@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, CSSProperties } from "react";
 import { MembershipLandingProps } from "@/types/membership";
 import PrepaidWalletAddedBenefitCard from "@/components/PrepaidWalletAddedBenefitCard/PrepaidWalletAddedBenefitCard";
 import HubspotForm from "./HubspotForm";
+import html2canvas from 'html2canvas';
 
 /* ─── Design Tokens ─── */
 const T = {
@@ -188,7 +189,7 @@ function CustomerSavingAmountCard({ savings }: { savings: number }) {
         gap: 8,
       }}
     >
-      <span style={{ fontSize: 13, color: "#888", fontFamily: T.sans, whiteSpace: "nowrap" }}>You'll potentially save</span>
+      <span style={{ fontSize: 23, color: "#000", fontFamily: T.sans, whiteSpace: "nowrap" }}>You'll potentially save</span>
       <span style={{ fontFamily: "'Gambarino', 'Cormorant Garamond', Georgia, serif", fontSize: 24, fontWeight: 600, color: "#1a1a1a", whiteSpace: "nowrap" }}>{fmt(savings)}</span>
     </div>
   );
@@ -517,12 +518,38 @@ export default function MembershipLanding(props: MembershipLandingProps) {
     : data.benefits;
 
   const [showPurchase, setShowPurchase] = useState(false);
-  const [showPopup, setShowPopup] = useState(true);
+  const [showPopup, setShowPopup] = useState(() => {
+    // Check if form has already been shown in this session
+    return !sessionStorage.getItem('membershipFormShown');
+  });
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = () => {
+    setShowPopup(false);
+    setIsDownloading(true);
+
+    setTimeout(async () => {
+      if (mainRef.current) {
+        const canvas = await html2canvas(mainRef.current, {
+          useCORS: true,
+          scale: window.devicePixelRatio || 1,
+          backgroundColor: '#fafafa' // Match the background
+        });
+        const link = document.createElement('a');
+        link.download = 'membership-card.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+      setIsDownloading(false);
+    }, 180);
+  };
 
   return (
     <>
       <style>{KEYFRAMES}</style>
-      <div style={{ maxWidth: 440, margin: "0 auto", minHeight: "100vh", background: "#fafafa", position: "relative", fontFamily: T.sans, filter: showPopup ? "blur(5px)" : "none", transition: "filter 0.3s ease" }}>
+      <div ref={mainRef} style={{ maxWidth: 440, margin: "0 auto", minHeight: "100vh", background: "#fafafa", position: "relative", fontFamily: T.sans, filter: showPopup ? "blur(5px)" : "none", transition: "filter 0.3s ease" }}>
         <Header restaurantName={props.restaurantName} title={data.title} subtitle={data.subtitle} themeColor={data.themeColor} fontColor={data.fontColor} logoUrl={props.logoUrl} />
 
         <div style={{ margin: "-168px 10px 0", position: "relative", zIndex: 2, paddingBottom: 120 }}>
@@ -564,13 +591,13 @@ export default function MembershipLanding(props: MembershipLandingProps) {
           </div>
         </div>
 
-        <div style={{ position: "sticky", bottom: 0, left: 0, right: 0, width: "100%", zIndex: 300 }}>
+        <div style={{ position: isDownloading ? "relative" : "sticky", bottom: isDownloading ? undefined : 0, left: isDownloading ? undefined : 0, right: isDownloading ? undefined : 0, width: "100%", zIndex: 300 }}>
           <div style={{ background: "linear-gradient(180deg, rgba(250,250,250,0) 15.38%, #fafafa 100%)", padding: "40px 14px 16px" }}>
-            <button onClick={() => setShowPurchase(true)}
+            <button onClick={handleDownload}
               style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: 18, background: "#161C1F", padding: "18px 24px", border: "none", cursor: "pointer" }}>
               <div style={{ textAlign: "left" as const }}>
                 <div style={{ fontFamily: T.sans, fontSize: 12, color: "#FFFFFF", marginBottom: 2 }}>Valid for {data.validity}</div>
-                <div style={{ fontFamily: "'Gambarino', 'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 400, color: "#FFFFFF" }}>Share Now</div>
+                <div style={{ fontFamily: "'Gambarino', 'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 400, color: "#FFFFFF" }}>Download Now</div>
               </div>
               <div style={{ textAlign: "right" as const }}>
                 <div style={{ fontFamily: T.sans, fontSize: 11, color: "#FFFFFF" }}>only</div>
@@ -598,7 +625,13 @@ export default function MembershipLanding(props: MembershipLandingProps) {
           <div style={{ position: "relative", width: "90%", maxWidth: 400, background: "#fff", borderRadius: 20, padding: "24px 20px", animation: "slideUp 0.3s ease-out", textAlign: "center", maxHeight: "90vh", overflowY: "auto" }}>
             <h1 style={{ fontFamily: T.serif, fontSize: 22, fontWeight: 600, color: "#333", marginBottom: 6 }}>Generate Your Membership</h1>
             <p style={{ fontFamily: T.sans, fontSize: 13, color: "#888", marginBottom: 16 }}>Fill in your details to get started</p>
-            <HubspotForm onSubmit={() => setShowPopup(false)} />
+            <HubspotForm onSubmit={() => {
+
+              setShowPopup(false);
+
+              sessionStorage.setItem('membershipFormShown', 'true');
+
+            }} />
           </div>
         </div>
       )}
