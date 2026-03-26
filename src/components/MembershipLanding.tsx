@@ -517,28 +517,12 @@ export default function MembershipLanding(props: MembershipLandingProps) {
     : data.benefits;
 
   const [showPurchase, setShowPurchase] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-
-      if (scrollPercent > 40) {
-        setShowPurchase(true);
-        window.removeEventListener("scroll", handleScroll);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [showPopup, setShowPopup] = useState(true);
 
   return (
     <>
       <style>{KEYFRAMES}</style>
-      <div style={{ maxWidth: 440, margin: "0 auto", minHeight: "100vh", background: "#fafafa", position: "relative", fontFamily: T.sans }}>
+      <div style={{ maxWidth: 440, margin: "0 auto", minHeight: "100vh", background: "#fafafa", position: "relative", fontFamily: T.sans, filter: showPopup ? "blur(5px)" : "none", transition: "filter 0.3s ease" }}>
         <Header restaurantName={props.restaurantName} title={data.title} subtitle={data.subtitle} themeColor={data.themeColor} fontColor={data.fontColor} logoUrl={props.logoUrl} />
 
         <div style={{ margin: "-168px 10px 0", position: "relative", zIndex: 2, paddingBottom: 120 }}>
@@ -607,6 +591,16 @@ export default function MembershipLanding(props: MembershipLandingProps) {
           city={props.city}
           onClose={() => setShowPurchase(false)}
         />
+      )}
+
+      {showPopup && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", animation: "fadeIn 0.3s ease-out" }}>
+          <div style={{ position: "relative", width: "90%", maxWidth: 400, background: "#fff", borderRadius: 20, padding: "24px 20px", animation: "slideUp 0.3s ease-out", textAlign: "center", maxHeight: "90vh", overflowY: "auto" }}>
+            <h1 style={{ fontFamily: T.serif, fontSize: 22, fontWeight: 600, color: "#333", marginBottom: 6 }}>Generate Your Membership</h1>
+            <p style={{ fontFamily: T.sans, fontSize: 13, color: "#888", marginBottom: 16 }}>Fill in your details to get started</p>
+            <HubspotForm onSubmit={() => setShowPopup(false)} />
+          </div>
+        </div>
       )}
     </>
   );
