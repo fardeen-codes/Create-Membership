@@ -8,6 +8,7 @@ import loadingCard2 from "@/assets/loading-card-2.png";
 import loadingCard3 from "@/assets/loading-card-3.png";
 import loadingChart1 from "@/assets/loading-chart-1.png";
 import loadingChart2 from "@/assets/loading-chart-2.png";
+import loadingChart4 from "@/assets/loading-chart-4.png";
 
 interface SuggestResult {
   place_id: string;
@@ -33,7 +34,7 @@ const LOADING_SLIDES = [
     key: "return",
     type: "chart" as const,
     title: (<>Customers are returning <br /><span className="loading-highlight">upto 10X faster</span> after<br />buying a membership!</>),
-    img: loadingChart1,
+    img: loadingChart4,
     imgClass: "loading-chart-img",
   },
   {
