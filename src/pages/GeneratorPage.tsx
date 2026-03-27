@@ -34,7 +34,7 @@ const LOADING_SLIDES = [
     key: "return",
     type: "chart" as const,
     title: (<>Customers are returning <br /><span className="loading-highlight">upto 10X faster</span> after<br />buying a membership!</>),
-    img: loadingChart4,
+    img: loadingChart1,
     imgClass: "loading-chart-img",
   },
   {

@@ -623,8 +623,8 @@ export default function MembershipLanding(props: MembershipLandingProps) {
       {showPopup && (
         <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", animation: "fadeIn 0.3s ease-out" }}>
           <div style={{ position: "relative", width: "90%", maxWidth: 400, background: "#fff", borderRadius: 20, padding: "24px 20px", animation: "slideUp 0.3s ease-out", textAlign: "center", maxHeight: "90vh", overflowY: "auto" }}>
-            <h1 style={{ fontFamily: T.serif, fontSize: 22, fontWeight: 600, color: "#333", marginBottom: 6 }}>Generate Your Membership</h1>
-            <p style={{ fontFamily: T.sans, fontSize: 13, color: "#888", marginBottom: 16 }}>Fill in your details to get started</p>
+            <h1 style={{ fontFamily: T.serif, fontSize: 22, fontWeight: 600, color: "#333", marginBottom: 6 }}>Your Membership is almost ready!</h1>
+            <p style={{ fontFamily: T.sans, fontSize: 13, color: "#888", marginBottom: 16 }}>Fill in the details and get access to it.</p>
             <HubspotForm onSubmit={() => {
 
               setShowPopup(false);
