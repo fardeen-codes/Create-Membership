@@ -475,7 +475,12 @@ function PurchaseCanvas({ brandInitials, title, price, themeColor, onClose, rest
             </h2>
 
             {/* HubSpot Form */}
-            <HubspotForm />
+            <HubspotForm
+              region="na1"
+              onFormSubmitted={() => {
+                setStep("thankyou");
+              }}
+            />
           </div>
         )}
 
@@ -518,10 +523,7 @@ export default function MembershipLanding(props: MembershipLandingProps) {
     : data.benefits;
 
   const [showPurchase, setShowPurchase] = useState(false);
-  const [showPopup, setShowPopup] = useState(() => {
-    // Check if form has already been shown in this session
-    return !sessionStorage.getItem('membershipFormShown');
-  });
+  const [showPopup, setShowPopup] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const mainRef = useRef<HTMLDivElement>(null);
@@ -625,13 +627,12 @@ export default function MembershipLanding(props: MembershipLandingProps) {
           <div style={{ position: "relative", width: "90%", maxWidth: 400, background: "#fff", borderRadius: 20, padding: "24px 20px", animation: "slideUp 0.3s ease-out", textAlign: "center", maxHeight: "90vh", overflowY: "auto" }}>
             <h1 style={{ fontFamily: T.serif, fontSize: 22, fontWeight: 600, color: "#333", marginBottom: 6 }}>Your Membership is almost ready!</h1>
             <p style={{ fontFamily: T.sans, fontSize: 13, color: "#888", marginBottom: 16 }}>Fill in the details and get access to it.</p>
-            <HubspotForm onSubmit={() => {
-
-              setShowPopup(false);
-
-              sessionStorage.setItem('membershipFormShown', 'true');
-
-            }} />
+            <HubspotForm
+              region="na1"
+              onFormSubmitted={() => {
+                setShowPopup(false);
+              }}
+            />
           </div>
         </div>
       )}
