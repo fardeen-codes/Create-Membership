@@ -264,9 +264,9 @@ export default function GeneratorPage() {
   return (
     <div className="gen-root gen-root--top page-enter">
       <div className="gen-glow" />
-      <button className="gen-home-btn" onClick={() => navigate("/")} type="button">
+      {/* <button className="gen-home-btn" onClick={() => navigate("/")} type="button">
         <Home size={20} />
-      </button>
+      </button> */}
       <div className="gen-card gen-card--top">
         <h2 className="gen-title">
           Let's build your brand's<br />membership.
