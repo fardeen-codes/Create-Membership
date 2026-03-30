@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, CSSProperties } from "react";
+import { useState, useEffect, useRef, CSSProperties, useMemo } from "react";
 import { MembershipLandingProps } from "@/types/membership";
 import PrepaidWalletAddedBenefitCard from "@/components/PrepaidWalletAddedBenefitCard/PrepaidWalletAddedBenefitCard";
 import HubspotForm from "./HubspotForm";
@@ -523,10 +523,27 @@ export default function MembershipLanding(props: MembershipLandingProps) {
     : data.benefits;
 
   const [showPurchase, setShowPurchase] = useState(false);
-  const [showPopup, setShowPopup] = useState(true);
+  const formCompletionKey = useMemo(
+    () =>
+      `membership_form_completed_${props.restaurantName ?? "default"}`,
+    [props.restaurantName]
+  );
+  const [hasCompletedForm, setHasCompletedForm] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const mainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem(formCompletionKey);
+    if (stored === "true") {
+      setHasCompletedForm(true);
+      setShowPopup(false);
+    } else {
+      setShowPopup(true);
+    }
+  }, [formCompletionKey]);
 
   const handleDownload = () => {
     setShowPopup(false);
@@ -630,6 +647,10 @@ export default function MembershipLanding(props: MembershipLandingProps) {
             <HubspotForm
               region="na1"
               onFormSubmitted={() => {
+                setHasCompletedForm(true);
+                if (typeof window !== "undefined") {
+                  window.localStorage.setItem(formCompletionKey, "true");
+                }
                 setShowPopup(false);
               }}
             />
