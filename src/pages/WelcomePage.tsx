@@ -101,7 +101,7 @@ export default function WelcomePage() {
           }}
           className={`welcome-cta welcome-stagger-2 ${mounted ? "stagger-visible" : "stagger-hidden"}`}
         >
-          See your membership
+          Build your membership
           <span className="welcome-cta-arrow">→</span>
         </button>
 
